@@ -1,0 +1,57 @@
+@charset "UTF-8";
+@import './Assets/fonts/styles.scss';
+@import './Assets/styles/color.scss';
+
+
+body {
+  margin: 0;
+  font-family: "Gotham-Medium", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+:root {
+  --tablet: 768px;
+  --smallMonitor: 992px;
+  --largeMonitor: 1200px;
+  --font-family: 'Gotham-Medium', sans-serif;
+}
+body {
+  // font-family: var(--font-family) !important;
+  // Root BG color
+  font-family: "Gotham-Medium", sans-serif;
+  background-color: #F0F0F7;
+}
+body ::-webkit-scrollbar {
+  width: 6px;
+}
+.ui.vertical.menu.sidebar-menu {
+  margin-top: 40px !important;
+  max-height: calc(100% - 40px) !important;
+  height: calc(100% - 40px) !important;
+}
+.ui.vertical.menu.sidebar-menu .item i.icon {
+  float: left;
+  margin: 0em 0.5em 0em 0em;
+}
+.main-content {
+  margin-top: 40px;
+}
+@media (min-width: 768px) {
+  .ui.vertical.menu.sidebar-menu {
+    visibility: visible;
+    transform: translate3d(0, 0, 0);
+    width: 15rem !important;
+  }
+  .main-content {
+    margin-left: 15rem;
+  }
+  .sidebar-menu-toggler {
+    display: none !important;
+  }
+}
