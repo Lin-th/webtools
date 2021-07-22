@@ -20,6 +20,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import UploadService from "../../Services/upload-files.service";
 
@@ -70,7 +73,7 @@ const steps = [
 ];
 
 export default function RepairData() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState("");
   const [message, setMessage] = useState([]);
   const [rows, setRows] = useState([]);
   const [dropdown, setDropdown] = useState([]);
@@ -85,6 +88,7 @@ export default function RepairData() {
   const [deviceSn, setDeviceSn] = useState("");
   const [deviceSTime, setDeviceSTime] = useState("");
   const [deviceETime, setDeviceETime] = useState("");
+  const [type, setType] = useState("");
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSite(event.target.value as number);
@@ -100,7 +104,8 @@ export default function RepairData() {
   };
 
   const getInventory = (type) => {
-    let str ="";
+    let str = "";
+    setType(type)
     const data = {
       site: site,
       type: type,
@@ -123,9 +128,15 @@ export default function RepairData() {
           } else if (type === "inverters") {
             rows.push(createData(type, deviceData.name, deviceData.SN));
           } else {
-            if(deviceData.connectedSolaredgeDeviceSN != str){
+            if (deviceData.connectedSolaredgeDeviceSN != str) {
               str = deviceData.connectedSolaredgeDeviceSN;
-              rows.push(createData(type, deviceData.connectedTo, deviceData.connectedSolaredgeDeviceSN));
+              rows.push(
+                createData(
+                  type,
+                  deviceData.connectedTo,
+                  deviceData.connectedSolaredgeDeviceSN
+                )
+              );
             }
           }
         }
@@ -134,6 +145,12 @@ export default function RepairData() {
       .catch((err) => {
         console.error(err);
       });
+  };
+
+  const handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log((event.target as HTMLInputElement).value);
+    setDeviceSn((event.target as HTMLInputElement).value);
+    // setValue((event.target as HTMLInputElement).value);
   };
 
   const handleClose = () => {
@@ -154,13 +171,47 @@ export default function RepairData() {
       startTime: deviceSTime,
       endTime: deviceETime,
     };
-    UploadService.getInverterTechnicalData(data)
+    let tag="";
+    if(type === "meters"){
+      tag = "PACTO"
+      UploadService.getValueGrid(data)
       .then((result) => {
-        console.log(result.data);
+
+        UploadService.repairData(result.data,deviceId,tag)
+        .then((result)=>{
+          console.log("HOH");
+          
+        })
+        .catch((err)=>{
+          console.error(err);
+          
+        })
       })
       .catch((err) => {
         console.error(err);
       });
+    }else if(type ==="inverters"){
+      tag ="IPOAT";
+      UploadService.getInverterTechnicalData(data)
+      .then((result) => {
+
+        UploadService.repairData(result.data,deviceId,tag)
+        .then((result)=>{
+          console.log("HOH");
+          
+        })
+        .catch((err)=>{
+          console.error(err);
+          
+        })
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    }else{
+      tag = ""
+    }
+    
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -326,6 +377,20 @@ export default function RepairData() {
                                 className={classes.table}
                               >
                                 <TableCell component="th" scope="row">
+                                  <RadioGroup
+                                    aria-label="gender"
+                                    name="controlled-radio-buttons-group"
+                                    value={deviceSn}
+                                    onChange={handleChangeRadio}
+                                  >
+                                    <FormControlLabel
+                                      value={row.SN}
+                                      control={<Radio />}
+                                      label=""
+                                    />
+                                  </RadioGroup>
+                                </TableCell>
+                                <TableCell component="th" scope="row">
                                   {row.type}
                                 </TableCell>
                                 <TableCell align="right">{row.name}</TableCell>
@@ -342,14 +407,7 @@ export default function RepairData() {
                     <h3>deviceID : {deviceId} </h3>
                     <h3>siteName : {site} </h3>
                     <h3>
-                      deviceSN :{" "}
-                      <TextField
-                        id="outlined-basic"
-                        label="Outlined"
-                        variant="outlined"
-                        size="small"
-                        onChange={(e) => setDeviceSn(e.target.value)}
-                      />{" "}
+                      deviceSN :{deviceSn}
                     </h3>
                     <form className={classes.container} noValidate>
                       <TextField
@@ -357,7 +415,7 @@ export default function RepairData() {
                         id="datetime-local"
                         label="start-date"
                         type="datetime-local"
-                        defaultValue="2017-05-24T10:30"
+                        defaultValue="2021-07-21T00:00"
                         className={classes.textField}
                         InputLabelProps={{
                           shrink: true,
@@ -372,7 +430,7 @@ export default function RepairData() {
                         id="datetime-local"
                         label="end-date"
                         type="datetime-local"
-                        defaultValue="2017-05-24T10:30"
+                        defaultValue="2021-07-21T12:00"
                         className={classes.textField}
                         InputLabelProps={{
                           shrink: true,

@@ -49,6 +49,37 @@ class UploadFilesService {
       },
     });
   }
+
+  getValueGrid(data: any) {
+    let value = JSON.stringify({
+      siteid: data.siteid,
+      sn: data.sn,
+      startTime: data.startTime,
+      endTime: data.endTime,
+    });
+
+    return http.post("/repair-data/get-value-grid", value, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
+  repairData(data: object, deviceId: string,tag:string) {
+    let value = JSON.stringify({
+      data:data,
+      deviceId:deviceId,
+      tag:tag
+    });
+    console.log(value);
+    
+
+    return http.post("/repair-data/repairWithAPI", value, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
 }
 
 export default new UploadFilesService();
