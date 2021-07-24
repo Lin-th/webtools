@@ -13,7 +13,7 @@ export const mainListItems = (
         <ListItemIcon>
           <DvrIcon />
         </ListItemIcon>
-        <ListItemText primary="Report" />
+        <ListItemText primary="AddDevice" />
       </ListItem>
     </Link>
     <Link to="/upload">

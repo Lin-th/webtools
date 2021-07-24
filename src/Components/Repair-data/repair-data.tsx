@@ -75,6 +75,7 @@ const steps = [
 export default function RepairData() {
   const [value, setValue] = React.useState("");
   const [message, setMessage] = useState([]);
+  const [res, setRes] = useState([]);
   const [rows, setRows] = useState([]);
   const [dropdown, setDropdown] = useState([]);
   const [alert, setAlert] = useState(false);
@@ -179,7 +180,7 @@ export default function RepairData() {
 
         UploadService.repairData(result.data,deviceId,tag)
         .then((result)=>{
-          console.log("HOH");
+          setRes(result.data.message)
           
         })
         .catch((err)=>{
@@ -464,6 +465,14 @@ export default function RepairData() {
           </Paper>
         )}
       </Box>
+      {res.length>0 && 
+      res.map(e=>{
+        return <div> <Alert variant="outlined" severity="success">
+        {e}
+      </Alert></div>
+      })
+      
+      }
     </>
   );
 }

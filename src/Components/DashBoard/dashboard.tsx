@@ -16,7 +16,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems } from "../listItems/listItems";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Report from "../Report/report";
+import AddDevice from "../Add-device/addDevice";
 import UploadFile from "../upload-files/upload-files";
 
 const drawerWidth = 240;
@@ -169,7 +169,7 @@ export default function Dashboard() {
           <Container maxWidth="lg" className={classes.container}>
             <Switch>
               <Route path="/report">
-                <Report />
+                <AddDevice />
               </Route>
 
               <Route path="/upload">
@@ -178,8 +178,7 @@ export default function Dashboard() {
               </Route>
 
               <Route path="/">
-                <h1>HOME</h1>
-                <Report />
+                <AddDevice />
               </Route>
             </Switch>
           </Container>
