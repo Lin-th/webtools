@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import homeAction from '../../Redux/Actions/HomeAction';
 import Dashboard from "../../Components/DashBoard/dashboard";
+import { LoginPage } from "../Login/login";
 
 const HomePage: React.FC<any> = (props) => {
     return (<div id='home-page'>
         {/* <LoaderComponent /> */}
-        <Dashboard/>
+        {/* <Dashboard/> */}
+        <LoginPage/>
         {/* <h1>{props.greeting}</h1> */}
         {/* <button type="button" onClick={(e)=>props.init()} >Click Me</button> */}
     </div>);

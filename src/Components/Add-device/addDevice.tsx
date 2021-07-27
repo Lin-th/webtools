@@ -16,7 +16,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
+import './addDevicer.scss'
 import uploadFilesService from "../../Services/upload-files.service";
+
+import { AccountInfo } from "@azure/msal-browser";
 
 function Copyright() {
   return (
@@ -59,6 +62,8 @@ const brands = ["huawei", "solaredge"];
 const hubs = ["ncnh6-hub", "uaigu-hub", "ihean-hub"];
 const types = ["meters" ,"inverters" ,"sensors"];
 
+const addDevice:boolean = false;
+
 export default function AddDevice() {
   const classes = useStyles();
   const [age, setAge] = useState<string | number>("");
@@ -71,9 +76,13 @@ export default function AddDevice() {
   const [type, setType] = useState<string | number>("");
   const [sites, setSites] = useState([]);
   const [siteD, setSiteD] = useState(0);
+   // current authenticated user
+   const [currentUser, setCurrentUser] = useState<AccountInfo>();
+   let userAccountInfo : AccountInfo;
 
   useEffect(() => {
     let mounted = true;
+    setCurrentUser(userAccountInfo);
     uploadFilesService.getSiteInfo().then((result) => {
       if (mounted) {
         console.log(result.data.site);
@@ -83,6 +92,29 @@ export default function AddDevice() {
     });
     //  mounted = false;
   }, []);
+
+  
+
+  
+
+  // Render JSON data in readable format
+  const PrettyPrintJson = ({ data }: any) => {
+    return (
+      <div>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      </div>
+    );
+  };
+
+  // Quick link - user revokes app's permission
+  const ShowPermissionRevokeLinks = () => {
+    return (
+      <div>
+        <div><a href="https://myapps.microsoft.com" target="_blank" rel="noopener">Revoke AAD permission</a></div>
+        <div><a href="https://account.live.com/consent/manage" target="_blank" rel="noopener">Revoke Consumer permission</a></div>
+      </div>
+    );
+  };
 
   const handleChangeBrand = (event: React.ChangeEvent<{ value: unknown }>) => {
     setBrand(event.target.value as string);
@@ -210,13 +242,14 @@ export default function AddDevice() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+        {/* <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
-        </Avatar>
+        </Avatar> */}
         <Typography component="h1" variant="h5">
           Add Device
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit} noValidate>
+        {addDevice && (
+          <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             <FormControl style={{ margin: 1 }} fullWidth>
               <InputLabel id="demo-controlled-open-select-label">
@@ -385,9 +418,25 @@ export default function AddDevice() {
             </Grid>
           </Grid> */}
         </form>
+
+        )}
+        {!addDevice && (
+          
+          <div>
+            <h1>Comming Soon ....</h1>
+            {currentUser && (
+            <div>
+              <PrettyPrintJson data={currentUser} />
+              <ShowPermissionRevokeLinks />
+            </div>
+          )}
+          </div>
+          
+        )}
+        
       </div>
-      <Box mt={5}>
-        <Copyright />
+      <Box className="footer">
+        <Copyright  />
       </Box>
     </Container>
   );

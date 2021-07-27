@@ -20,7 +20,6 @@ import Tab from "@material-ui/core/Tab";
 
 import UploadService from "../../Services/upload-files.service";
 import RepairData from "../Repair-data/repair-data";
-import UploadWithApi from "../upload-with-api/upload-with-api";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -90,7 +89,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function UploadFile() {
+export default function UploadWithFile() {
   const [value, setValue] = React.useState(0);
 
   const [selectedFiles, setSelectedFiles] = useState(undefined);
@@ -239,17 +238,7 @@ export default function UploadFile() {
   return (
     <div className="mg20">
       <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Repair with CSV" {...a11yProps(0)} />
-            <Tab label="Repair with API" {...a11yProps(1)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
+        
           {alert ? (
             <Alert severity="success">
               <AlertTitle>Success</AlertTitle>
@@ -331,10 +320,9 @@ export default function UploadFile() {
               </ListItem>
             ))}
         </ul> */}
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-        <UploadWithApi/>
-        </TabPanel>
+        {/* <TabPanel value={value} index={1}>
+        <RepairData/>
+        </TabPanel> */}
        
       </Box>
     </div>
