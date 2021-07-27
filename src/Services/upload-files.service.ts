@@ -65,16 +65,19 @@ class UploadFilesService {
     });
   }
 
-  repairData(data: object, deviceId: string,tag:string) {
+  repairData(data: object, deviceId: string,tag:string, startTime:string) {
     let value = JSON.stringify({
       data:data,
       deviceId:deviceId,
-      tag:tag
+      tag:tag,
+      startTime:startTime
     });
     console.log(value);
+    console.log(data['data']['startTime']);
+    
     
 
-    return http.post("/repair-data/repairWithAPI", value, {
+    return http.post("/repair-data/repairWithAPf", value, {
       headers: {
         "Content-Type": "application/json",
       },

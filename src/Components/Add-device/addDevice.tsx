@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
-import './addDevicer.scss'
-import uploadFilesService from "../../Services/upload-files.service";
-
 import { AccountInfo } from "@azure/msal-browser";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import FormControl from "@material-ui/core/FormControl";
+import Grid from "@material-ui/core/Grid";
+import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import React, { useEffect, useState } from "react";
+import uploadFilesService from "../../Services/upload-files.service";
+import './addDevicer.scss';
+
 
 function Copyright() {
   return (
@@ -66,10 +62,10 @@ const addDevice:boolean = false;
 
 export default function AddDevice() {
   const classes = useStyles();
-  const [age, setAge] = useState<string | number>("");
+  // const [age, setAge] = useState<string | number>("");
   const [brand, setBrand] = useState<string | number>("");
   const [hub, setHub] = useState<string | number>("");
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [deviceTXT, setdeviceTXT] = useState("false");
   const [devices, setDevices] = useState([]);
   const [device, setDevice] = useState<string | number>("");
@@ -110,8 +106,8 @@ export default function AddDevice() {
   const ShowPermissionRevokeLinks = () => {
     return (
       <div>
-        <div><a href="https://myapps.microsoft.com" target="_blank" rel="noopener">Revoke AAD permission</a></div>
-        <div><a href="https://account.live.com/consent/manage" target="_blank" rel="noopener">Revoke Consumer permission</a></div>
+        {/* <div><a href="https://myapps.microsoft.com" target="_blank" rel="noopener">Revoke AAD permission</a></div>
+        <div><a href="https://account.live.com/consent/manage" target="_blank" rel="noopener">Revoke Consumer permission</a></div> */}
       </div>
     );
   };
@@ -121,11 +117,11 @@ export default function AddDevice() {
   };
 
   const handleCloseBrand = () => {
-    setOpen(false);
+    // setOpen(false);
   };
 
   const handleOpenBrand = () => {
-    setOpen(true);
+    // setOpen(true);
   };
 
   const handleChangeSites = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -134,11 +130,11 @@ export default function AddDevice() {
   };
 
   const handleCloseSites = () => {
-    setOpen(false);
+    // setOpen(false);
   };
 
   const handleOpenSites = () => {
-    setOpen(true);
+    // setOpen(true);
   };
 
   const handleChangeHub = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -146,11 +142,11 @@ export default function AddDevice() {
   };
 
   const handleCloseHub = () => {
-    setOpen(false);
+    // setOpen(false);
   };
 
   const handleOpenHub = () => {
-    setOpen(true);
+    // setOpen(true);
   };
 
   const handleChangeDevice = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -158,11 +154,11 @@ export default function AddDevice() {
   };
 
   const handleCloseDevice = () => {
-    setOpen(false);
+    // setOpen(false);
   };
 
   const handleOpenDevice = () => {
-    setOpen(true);
+    // setOpen(true);
   };
 
   const handleChangeType = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -195,7 +191,7 @@ export default function AddDevice() {
           } else if (type === "inverters") {
             rows.push(createData(type, deviceData.name, deviceData.SN));
           } else {
-            if (deviceData.connectedSolaredgeDeviceSN != str) {
+            if (deviceData.connectedSolaredgeDeviceSN !== str) {
               str = deviceData.connectedSolaredgeDeviceSN;
               rows.push(
                 createData(
@@ -215,11 +211,11 @@ export default function AddDevice() {
   };
 
   const handleCloseType = () => {
-    setOpen(false);
+    // setOpen(false);
   };
 
   const handleOpenType = () => {
-    setOpen(true);
+    // setOpen(true);
   };
 
   const handleSubmit = evt => {

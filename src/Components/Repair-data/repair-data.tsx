@@ -178,7 +178,7 @@ export default function RepairData() {
       UploadService.getValueGrid(data)
       .then((result) => {
 
-        UploadService.repairData(result.data,deviceId,tag)
+        UploadService.repairData(result.data,deviceId,tag, data.startTime)
         .then((result)=>{
           setRes(result.data.message)
           
@@ -196,7 +196,7 @@ export default function RepairData() {
       UploadService.getInverterTechnicalData(data)
       .then((result) => {
 
-        UploadService.repairData(result.data,deviceId,tag)
+        UploadService.repairData(result.data,deviceId,tag, data.startTime)
         .then((result)=>{
           console.log("HOH");
           

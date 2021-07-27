@@ -1,37 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useHistory } from "react-router";
+import { Box, Button, Typography } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
+import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
-import Stepper from "@material-ui/core/Stepper";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Select from "@material-ui/core/Select";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Link from "@material-ui/core/Link";
-import { Box, Typography, Button, withStyles } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import { Alert, AlertTitle } from "@material-ui/lab";
-// import AddressForm from './AddressForm';
-// import PaymentForm from './PaymentForm';
-// import Review from './Review';
-import LinearProgress from "@material-ui/core/LinearProgress";
-import StepContent from "@material-ui/core/StepContent";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import Stepper from "@material-ui/core/Stepper";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-
+import TextField from "@material-ui/core/TextField";
+import { Alert } from "@material-ui/lab";
+import React, { useState } from "react";
 import UploadService from "../../Services/upload-files.service";
+
 
 function createData(type: string, name: string, SN: number) {
   return { type, name, SN };
@@ -129,13 +121,13 @@ const steps = ["Shipping address", "Payment details", "Review your order"];
 
 export default function UploadWithApi() {
   const classes = useStyles();
-  const [value, setValue] = React.useState("");
+  // const [value, setValue] = React.useState("");
   const [message, setMessage] = useState([]);
   const [res, setRes] = useState([]);
   const [rows, setRows] = useState([]);
   const [dropdown, setDropdown] = useState([]);
-  const [alert, setAlert] = useState(false);
-  const history = useHistory();
+  // const [alert, setAlert] = useState(false);
+  // const history = useHistory();
   const [activeStep, setActiveStep] = React.useState(0);
   const [site, setSite] = React.useState<string | number>("");
   const [open, setOpen] = React.useState(false);
@@ -153,7 +145,7 @@ export default function UploadWithApi() {
   const handleChangeInventory = (
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     getInventory(event.target.value);
 
     setInventory(event.target.value as string);
@@ -184,7 +176,7 @@ export default function UploadWithApi() {
           } else if (type === "inverters") {
             rows.push(createData(type, deviceData.name, deviceData.SN));
           } else {
-            if (deviceData.connectedSolaredgeDeviceSN != str) {
+            if (deviceData.connectedSolaredgeDeviceSN !== str) {
               str = deviceData.connectedSolaredgeDeviceSN;
               rows.push(
                 createData(
@@ -204,7 +196,7 @@ export default function UploadWithApi() {
   };
 
   const handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log((event.target as HTMLInputElement).value);
+    // console.log((event.target as HTMLInputElement).value);
     setDeviceSn((event.target as HTMLInputElement).value);
     // setValue((event.target as HTMLInputElement).value);
   };
@@ -232,9 +224,13 @@ export default function UploadWithApi() {
       tag = "PACTO";
       UploadService.getValueGrid(data)
         .then((result) => {
-          UploadService.repairData(result.data, deviceId, tag)
+          UploadService.repairData(result.data, deviceId, tag, data.startTime)
             .then((result) => {
-              setRes(result.data.message);
+              setRes(result.data.message)
+              // setRes(["Success"]);
+
+              // console.log(result.data);
+              ;
             })
             .catch((err) => {
               console.error(err);
@@ -247,9 +243,9 @@ export default function UploadWithApi() {
       tag = "IPOAT";
       UploadService.getInverterTechnicalData(data)
         .then((result) => {
-          UploadService.repairData(result.data, deviceId, tag)
+          UploadService.repairData(result.data, deviceId, tag, data.startTime)
             .then((result) => {
-              console.log("HOH");
+              setRes(result.data.message)
             })
             .catch((err) => {
               console.error(err);
@@ -287,7 +283,7 @@ export default function UploadWithApi() {
   const handleGetsite = () => {
     return UploadService.getSiteInfo()
       .then((result) => {
-        console.log(result.data.site);
+        // console.log(result.data.site);
 
         setDropdown(result.data.site);
       })
@@ -300,7 +296,7 @@ export default function UploadWithApi() {
       .then((result) => {
         setMessage([result.data.message]);
         setTimeout(function () {
-          setAlert(false);
+          // setAlert(false);
         }, 5000);
       })
       .catch(() => {});
@@ -535,9 +531,7 @@ export default function UploadWithApi() {
             )}
           </React.Fragment>
         </Paper>
-        <Copyright />
-      </main>
-      {res.length > 0 &&
+        {res.length > 0 &&
         res.map((e) => {
           return (
             <div>
@@ -548,6 +542,9 @@ export default function UploadWithApi() {
             </div>
           );
         })}
+        <Copyright />
+      </main>
+      
     </React.Fragment>
   );
 }
