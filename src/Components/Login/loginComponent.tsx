@@ -1,4 +1,5 @@
 // import { AccountInfo } from "@azure/msal-browser";
+import { useMsal } from "@azure/msal-react";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
@@ -7,15 +8,14 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import { UserAgentApplication } from "msal";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import loginIMG from "../../Assets/Images/login.png";
 import microsoftLogo from "../../Assets/Images/microsoftLogo.png";
-// import AzureAuthenticationContext from "../../Utils/azure/authContext";
-import { config } from "../../Utils/azure/Config";
-import { getUserProfile } from "../../Utils/MSUtils";
+import authProvider, { authenticationParameters } from "../../Utils/azure/authProvider";
+import Dashboard from "../DashBoard/dashboard";
 
-
+const myStorage = window.localStorage;
 
 function Copyright() {
   return (
@@ -62,118 +62,43 @@ export default function SignIn({ onAuthenticated }: any) {
   // const isIE = msie > 0 || msie11 > 0;
   // const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState("");
+  const history = useHistory();
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({});
+  const  { instance, inProgress, accounts } = useMsal();
+  // const  loginRedirect = () =>{
+  //   _.debounce(() => {
+  //     authProvider.login(authenticationParameters)
+  //   }, 450)
+  // }
 
-  const userAgentApplication = new UserAgentApplication({
-    auth: {
-      clientId: config.clientId,
-      redirectUri: config.redirectUri,
-      authority:config.authority
-    },
-    cache: {
-      cacheLocation: "sessionStorage",
-      storeAuthStateInCookie: true,
-    },
-  });
-
-  // const toggle = () => {
-  //   setIsOpen(true);
-  // };
-
-  const login = async () => {
-    try {
-      console.log(config);
-
-      await userAgentApplication.loginPopup({
-        scopes: config.scopes,
-        prompt: "select_account",
-      });
-
-      const user = await getUserProfile(userAgentApplication, config.scopes);
-console.log("userWith Azure=>",user);
-
-      // setIsAuthenticated(true);
-      setUser({
-        displayName: user.displayName,
-        email: user.mail || user.userPrincipalName,
-      }); 
-      // localStorage.setItem(user,user)
-      setError(null);
-    } catch (err) {
-      console.log(err.message);
-
-      // setIsAuthenticated(false);
-      setUser({});
-      setError(err.message);
+  useEffect(()=>{
+    if (myStorage.getItem("user")) {
+      history.push("/report");
     }
-  };
+  })
 
-  // const logout = () => {
-  //   userAgentApplication.logout();
-  // };
+  const logout = () => {
+    authProvider.logout()
+  }
 
-  // Azure client context
-  // const authenticationModule: AzureAuthenticationContext =
-  //   new AzureAuthenticationContext();
+  const handleLogin =async (instance)=> {
+    instance.loginPopup(authenticationParameters)
+  .then((e)=>{
+    myStorage.setItem("user",JSON.stringify(e));
+  })
 
-  // const [authenticated, setAuthenticated] = useState<Boolean>(false);
-  // const [user, setUser] = useState<AccountInfo>();
+}
 
-  // const logIn = (method: string): any => {
-  //   const typeName = "loginPopup";
-  //   const logInType = isIE ? "loginRedirect" : typeName;
 
-  //   // Azure Login
-  //   authenticationModule.login(logInType, returnedAccountInfo);
-  // };
 
-  const logOut = (): any => {
-    if (user) {
-      onAuthenticated(undefined);
-      // Azure Logout
-      // authenticationModule.logout(user);
-    }
-  };
 
-  // const returnedAccountInfo = (user: AccountInfo) => {
-  //   // set state
-  //   setAuthenticated(user?.name ? true : false);
-  //   onAuthenticated(user);
-  //   setUser(user);
-  // };
-
-  // const showLogInButton = (): any => {
-  //   return (
-      // <Button
-      //   type="submit"
-      //   fullWidth
-      //   variant="contained"
-      //   color="primary"
-      //   className={classes.submit}
-      //   onClick={() => logIn()}
-      // >
-      //   Sign In With Azure
-      // </Button>
-      // <></>ไ
-  //   );
-  // };
-
-  // const showLogOutButton = (): any => {
-  //   return (
-  //     <div id="authenticationButtonDiv">
-  //       <div id="authentication">
-  //         <button id="authenticationButton" onClick={() => logOut()}>
-  //           Log out
-  //         </button>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  // const showButton = (): any => {
-  //   return authenticated ? showLogOutButton() : showLogInButton();
-  // };
+  
+  const renderAuthenticated = ({login, logout, authenticationState, error, accountInfo}) => {
+    console.log(login, logout, authenticationState, error, accountInfo);
+    return <Dashboard/>
+    
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -194,19 +119,13 @@ console.log("userWith Azure=>",user);
           className={classes.form}
         >
           <img src={microsoftLogo} alt="" width="120px" className="center" />
-          {/* {authenticationModule.isAuthenticationConfigured ? (
-            showButton()
-          ) : (
-            <div>Authentication Client ID is not configured.</div>
-          )} */}
-
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={() => login()}
+            onClick={() => handleLogin(instance)}
           >
             Sign In With Azure
           </Button>
@@ -214,6 +133,9 @@ console.log("userWith Azure=>",user);
             <h2 style={{color:"red"}}>{error}</h2>
           )}
         </div>
+        {/* <AzureAD provider={authProvider} forceLogin={true}>
+          {renderAuthenticated}
+        </AzureAD> */}
       </div>
       <Box mt={8}>
         <Copyright />
