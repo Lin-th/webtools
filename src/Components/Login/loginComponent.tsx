@@ -90,6 +90,7 @@ export default function SignIn({ onAuthenticated }: any) {
       });
 
       const user = await getUserProfile(userAgentApplication, config.scopes);
+console.log("userWith Azure=>",user);
 
       // setIsAuthenticated(true);
       setUser({
