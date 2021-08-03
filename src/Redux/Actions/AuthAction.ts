@@ -1,37 +1,41 @@
-export class AuthAction {
+import { userService } from "../../Services/user.service";
 
-    constructor() {
-
-    }
-    onUpdateProfile = (ownProps: any, jwt: any) => (dispatch: any) => {
+export const login = (instance) => (dispatch) => {
+    return userService.login(instance).then(
+      (data) => {
         dispatch({
-            type: 'AAD_LOGIN_SUCCESS',
-            payload: {
-                account: jwt.account,
-                jwtAccessToken: jwt.accessToken,
-                jwtIdToken: jwt.idToken
-            }
+          type: "LOGIN_SUCCESS",
+          payload: { user: data },
         });
-        ownProps.history.push("/Company");
-    }
+  
+        return Promise.resolve();
+      },
+      (error) => {
+        const message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+  
+        dispatch({
+          type: "LOGIN_FAIL",
+        });
+  
+        dispatch({
+          type: "SET_MESSAGE",
+          payload: message,
+        });
+  
+        return Promise.reject();
+      }
+    );
+  };
 
-    getRole = () => (dispatch: any, getState: any) => {
-        let state = getState();
-        let { roles } = state.authState;
-        return roles || [];
-    }
-
-    setRole = (roles: any) => (dispatch: any) => {
-        dispatch({ type: 'AAD_ROLES', payload: { roles: roles } });
-    }
-
-    getProfile = () => (dispatch: any, getState: any) => {
-        let state = getState();
-        let authState = state.authState;
-        let { account } = authState;
-        return account;
-    }
-
-}
-
-export default new AuthAction();
+  export const logout = (instance) => (dispatch) => {
+    userService.logout(instance);
+  
+    dispatch({
+      type: "LOGOUT",
+    });
+  };

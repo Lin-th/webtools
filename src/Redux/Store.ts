@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 
 import loaderReducer from './Reducers/LoaderReducer'
 import homeReducer from './Reducers/HomeReducer';
+import auth from './Reducers/auth';
 
 const persistConfig = {
     key: 'root',
@@ -14,7 +15,8 @@ const persistConfig = {
 
 let rootReducer = combineReducers({
     loaderState: loaderReducer,
-    homeState: homeReducer
+    homeState: homeReducer,
+    authState: auth
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

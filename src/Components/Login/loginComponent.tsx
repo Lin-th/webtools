@@ -8,14 +8,19 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import loginIMG from "../../Assets/Images/login.png";
 import microsoftLogo from "../../Assets/Images/microsoftLogo.png";
+import { userService } from "../../Services/user.service";
 import authProvider, { authenticationParameters } from "../../Utils/azure/authProvider";
 import Dashboard from "../DashBoard/dashboard";
 
+import {login,logout} from "../../Redux/Actions/AuthAction"
+
 const myStorage = window.localStorage;
+
 
 function Copyright() {
   return (
@@ -54,7 +59,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({ onAuthenticated }: any) {
+
+
+function SignIn(props) {
   const classes = useStyles();
   // const ua = window.navigator.userAgent;
   // const msie = ua.indexOf("MSIE ");
@@ -66,6 +73,7 @@ export default function SignIn({ onAuthenticated }: any) {
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState({});
   const  { instance, inProgress, accounts } = useMsal();
+
   // const  loginRedirect = () =>{
   //   _.debounce(() => {
   //     authProvider.login(authenticationParameters)
@@ -73,8 +81,13 @@ export default function SignIn({ onAuthenticated }: any) {
   // }
 
   useEffect(()=>{
-    if (myStorage.getItem("user")) {
+      
+    if(props.loggedIn){
+      console.log("LP");
       history.push("/report");
+    }else{
+      console.log("LOIU");
+      
     }
   })
 
@@ -82,11 +95,13 @@ export default function SignIn({ onAuthenticated }: any) {
     authProvider.logout()
   }
 
+
   const handleLogin =async (instance)=> {
-    instance.loginPopup(authenticationParameters)
-  .then((e)=>{
-    myStorage.setItem("user",JSON.stringify(e));
-  })
+   props.login(instance)
+  //   instance.loginPopup(authenticationParameters)
+  // .then((e)=>{
+  //   myStorage.setItem("user",JSON.stringify(e));
+  // })
 
 }
 
@@ -143,3 +158,11 @@ export default function SignIn({ onAuthenticated }: any) {
     </Container>
   );
 }
+
+const mapStateToProps = function(state) {
+  return {
+    loggedIn: state.authState.isLoggedIn
+  }
+}
+
+export default connect(mapStateToProps,{login,logout})(SignIn);
