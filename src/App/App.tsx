@@ -11,9 +11,6 @@ const App: React.FC = (props) => {
     <Router basename="/comm-ui">
           <HomePage />
     </Router>
-    {/* <hr /> */}
-    {/* <div>BUILD#: {env.REACT_APP_BUILD_NUM}</div>
-    <div>env.ts: {JSON.stringify(env)}</div> */}
   </>);
 }
 
