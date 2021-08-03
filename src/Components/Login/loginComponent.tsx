@@ -69,6 +69,7 @@ export default function SignIn({ onAuthenticated }: any) {
     auth: {
       clientId: config.clientId,
       redirectUri: config.redirectUri,
+      authority:config.authority
     },
     cache: {
       cacheLocation: "sessionStorage",
