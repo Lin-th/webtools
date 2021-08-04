@@ -108,10 +108,11 @@ function Dashboard(props) {
   const [open, setOpen] = React.useState(true);
   const[name,setName] = useState("")
   const  { instance} = useMsal();
-
+// eslint-disable-next-line
   useEffect(()=>{
     if(props.user){
       const name = props.user.account.name;
+      // eslint-disable-next-line
       setName(name);
     }
     

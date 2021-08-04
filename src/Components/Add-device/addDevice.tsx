@@ -75,7 +75,6 @@ export default function AddDevice() {
    // current authenticated user
    const [currentUser, setCurrentUser] = useState<AccountInfo>();
    let userAccountInfo : AccountInfo;
-
   useEffect(() => {
     let mounted = true;
     setCurrentUser(userAccountInfo);
@@ -87,6 +86,7 @@ export default function AddDevice() {
       }
     });
     //  mounted = false;
+    // eslint-disable-next-line
   }, []);
 
   
