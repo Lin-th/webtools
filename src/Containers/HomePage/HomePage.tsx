@@ -1,12 +1,12 @@
+import { PublicClientApplication } from "@azure/msal-browser";
+import { MsalProvider } from "@azure/msal-react";
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import homeAction from "../../Redux/Actions/HomeAction";
 import Dashboard from "../../Components/DashBoard/dashboard";
-import { LoginPage } from "../Login/login";
-import { PublicClientApplication } from "@azure/msal-browser";
+import homeAction from "../../Redux/Actions/HomeAction";
 import { msalConfig } from "../../Utils/azure/authProvider";
-import { MsalProvider, useMsal } from "@azure/msal-react";
+import { LoginPage } from "../Login/login";
 
 const msalInstance = new PublicClientApplication(msalConfig);
 

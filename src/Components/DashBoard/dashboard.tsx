@@ -1,3 +1,5 @@
+import { useMsal } from "@azure/msal-react";
+import { Button } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,11 +13,14 @@ import Typography from "@material-ui/core/Typography";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { logout } from "../../Redux/Actions/AuthAction";
 import AddDevice from "../Add-device/addDevice";
 import { mainListItems } from "../listItems/listItems";
 import UploadFile from "../upload-files/upload-files";
+
 
 const drawerWidth = 240;
 
@@ -98,15 +103,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const[name,setName] = useState("")
+  const  { instance} = useMsal();
+
+  useEffect(()=>{
+    if(props.user){
+      const name = props.user.account.name;
+      setName(name);
+    }
+    
+  })
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleLogout =async (instance)=> {
+    props.logout(instance)
+   //   instance.loginPopup(authenticationParameters)
+   // .then((e)=>{
+   //   myStorage.setItem("user",JSON.stringify(e));
+   // })
+ 
+ }
 
   return (
     <Router>
@@ -138,6 +162,12 @@ export default function Dashboard() {
             >
               Repiar-data
             </Typography>
+            {name && (
+              <div style={{marginRight:"2%"}}>
+                {name}
+              </div>
+            )}
+            <Button variant="contained" onClick={() => handleLogout(instance)}>sign out</Button>
             {/* <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -185,3 +215,12 @@ export default function Dashboard() {
     </Router>
   );
 }
+
+const mapStateToProps = function(state) {
+  return {
+    loggedIn: state.authState.isLoggedIn,
+    user: state.authState.user
+  }
+}
+
+export default connect(mapStateToProps,{logout})(Dashboard);

@@ -1,6 +1,10 @@
 import http from "../Utils/api/http-common";
+import authHeader from "./authHeader";
+
+const user = JSON.parse(localStorage.getItem('user'));
 
 class UploadFilesService {
+  
   upload(file, onUploadProgress) {
     let formData = new FormData();
 
@@ -9,17 +13,19 @@ class UploadFilesService {
     return http.post("/repair-data", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
+        'Authorization': 'Bearer '+user.accessToken
       },
+      
       onUploadProgress,
     });
   }
 
   getDevice(deviceId) {
-    return http.get(`/repair-data/seachDevice?deviceId=${deviceId}`);
+    return http.get(`/repair-data/seachDevice?deviceId=${deviceId}`,{headers:authHeader()});
   }
 
   getSiteInfo() {
-    return http.get(`/repair-data/get-site`);
+    return http.get(`/repair-data/get-site`,{headers:authHeader()});
   }
 
   getInventorys(data: any) {
@@ -31,6 +37,7 @@ class UploadFilesService {
     return http.post("/repair-data/get-inventory", value, {
       headers: {
         "Content-Type": "application/json",
+        "Authorization":'Bearer ' + user.accessToken
       },
     });
   }
@@ -46,6 +53,7 @@ class UploadFilesService {
     return http.post("/repair-data/get-inventory-technical-data", value, {
       headers: {
         "Content-Type": "application/json",
+        "Authorization":'Bearer ' + user.accessToken
       },
     });
   }
@@ -61,6 +69,7 @@ class UploadFilesService {
     return http.post("/repair-data/get-value-grid", value, {
       headers: {
         "Content-Type": "application/json",
+        "Authorization":'Bearer ' + user.accessToken
       },
     });
   }
@@ -72,14 +81,10 @@ class UploadFilesService {
       tag:tag,
       startTime:startTime
     });
-    console.log(value);
-    console.log(data['data']['startTime']);
-    
-    
-
     return http.post("/repair-data/repairWithAPf", value, {
       headers: {
         "Content-Type": "application/json",
+        "Authorization":'Bearer ' + user.accessToken
       },
     });
   }

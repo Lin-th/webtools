@@ -8,7 +8,7 @@ import {
 
 const App: React.FC = (props) => {
   return (<>
-    <Router basename="/comm-ui">
+    <Router basename={process.env.REACT_APP_BASE_NAME}>
           <HomePage />
     </Router>
   </>);

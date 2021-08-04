@@ -8,18 +8,14 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import React, { useCallback, useEffect, useState } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import loginIMG from "../../Assets/Images/login.png";
 import microsoftLogo from "../../Assets/Images/microsoftLogo.png";
-import { userService } from "../../Services/user.service";
-import authProvider, { authenticationParameters } from "../../Utils/azure/authProvider";
-import Dashboard from "../DashBoard/dashboard";
+import { login, logout } from "../../Redux/Actions/AuthAction";
 
-import {login,logout} from "../../Redux/Actions/AuthAction"
 
-const myStorage = window.localStorage;
 
 
 function Copyright() {
@@ -68,33 +64,20 @@ function SignIn(props) {
   // const msie11 = ua.indexOf("Trident/");
   // const isIE = msie > 0 || msie11 > 0;
   // const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const history = useHistory();
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState({});
-  const  { instance, inProgress, accounts } = useMsal();
-
-  // const  loginRedirect = () =>{
-  //   _.debounce(() => {
-  //     authProvider.login(authenticationParameters)
-  //   }, 450)
-  // }
+  // const [user, setUser] = useState({});
+  const  { instance} = useMsal();
 
   useEffect(()=>{
       
     if(props.loggedIn){
-      console.log("LP");
       history.push("/report");
     }else{
-      console.log("LOIU");
-      
+      history.push("/");
     }
   })
-
-  const logout = () => {
-    authProvider.logout()
-  }
-
 
   const handleLogin =async (instance)=> {
    props.login(instance)
@@ -106,21 +89,11 @@ function SignIn(props) {
 }
 
 
-
-
-  
-  const renderAuthenticated = ({login, logout, authenticationState, error, accountInfo}) => {
-    console.log(login, logout, authenticationState, error, accountInfo);
-    return <Dashboard/>
-    
-  }
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.large} src={loginIMG}>
-          {/* <LockOutlinedIcon /> */}
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign in
@@ -144,13 +117,10 @@ function SignIn(props) {
           >
             Sign In With Azure
           </Button>
-          {error && (
+          {/* {error && (
             <h2 style={{color:"red"}}>{error}</h2>
-          )}
+          )} */}
         </div>
-        {/* <AzureAD provider={authProvider} forceLogin={true}>
-          {renderAuthenticated}
-        </AzureAD> */}
       </div>
       <Box mt={8}>
         <Copyright />
