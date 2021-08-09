@@ -137,6 +137,7 @@ export default function UploadWithApi() {
   const [deviceSTime, setDeviceSTime] = useState("");
   const [deviceETime, setDeviceETime] = useState("");
   const [type, setType] = useState("");
+  const date = new Date();
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSite(event.target.value as number);
@@ -466,7 +467,7 @@ export default function UploadWithApi() {
                         id="datetime-local"
                         label="start-date"
                         type="datetime-local"
-                        defaultValue="2021-07-21T00:00"
+                        defaultValue={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}`}
                         className={classes.textField}
                         InputLabelProps={{
                           shrink: true,
@@ -481,7 +482,7 @@ export default function UploadWithApi() {
                         id="datetime-local"
                         label="end-date"
                         type="datetime-local"
-                        defaultValue="2021-07-21T12:00"
+                        defaultValue={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}`}
                         className={classes.textField}
                         InputLabelProps={{
                           shrink: true,

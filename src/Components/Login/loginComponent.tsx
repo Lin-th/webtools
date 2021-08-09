@@ -75,7 +75,7 @@ function SignIn(props) {
     if(props.loggedIn){
       history.push("/report");
     }else{
-      history.push("/");
+      // history.push("/");
     }
   })
 

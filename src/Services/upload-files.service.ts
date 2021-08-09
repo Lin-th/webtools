@@ -3,6 +3,7 @@ import authHeader from "./authHeader";
 
 const user = JSON.parse(localStorage.getItem('user'));
 
+
 class UploadFilesService {
   
   upload(file, onUploadProgress) {
@@ -29,6 +30,8 @@ class UploadFilesService {
   }
 
   getInventorys(data: any) {
+    console.log(user);
+    
     let value = JSON.stringify({
       site: data.site,
       type: data.type,
@@ -37,7 +40,7 @@ class UploadFilesService {
     return http.post("/repair-data/get-inventory", value, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization":'Bearer ' + user.accessToken
+        ...authHeader()
       },
     });
   }
@@ -53,7 +56,7 @@ class UploadFilesService {
     return http.post("/repair-data/get-inventory-technical-data", value, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization":'Bearer ' + user.accessToken
+        ...authHeader()
       },
     });
   }
@@ -69,7 +72,7 @@ class UploadFilesService {
     return http.post("/repair-data/get-value-grid", value, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization":'Bearer ' + user.accessToken
+        ...authHeader()
       },
     });
   }
@@ -81,10 +84,10 @@ class UploadFilesService {
       tag:tag,
       startTime:startTime
     });
-    return http.post("/repair-data/repairWithAPf", value, {
+    return http.post("/repair-data/repairWithAPI", value, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization":'Bearer ' + user.accessToken
+        ...authHeader()
       },
     });
   }

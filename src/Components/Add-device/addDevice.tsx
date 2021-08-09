@@ -80,7 +80,7 @@ export default function AddDevice() {
     setCurrentUser(userAccountInfo);
     uploadFilesService.getSiteInfo().then((result) => {
       if (mounted) {
-        console.log(result.data.site);
+        // console.log(result.data.site);
 
         setSites(result.data.site);
       }
@@ -230,7 +230,7 @@ export default function AddDevice() {
       siteD,
       type,
     }
-    console.log(data);
+    // console.log(data);
     
   };
 

@@ -90,6 +90,7 @@ export default function RepairData() {
   const [deviceSTime, setDeviceSTime] = useState("");
   const [deviceETime, setDeviceETime] = useState("");
   const [type, setType] = useState("");
+  const date = new Date();
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSite(event.target.value as number);
@@ -98,7 +99,7 @@ export default function RepairData() {
   const handleChangeInventory = (
     event: React.ChangeEvent<{ value: unknown }>
   ) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     getInventory(event.target.value);
 
     setInventory(event.target.value as string);
@@ -149,7 +150,7 @@ export default function RepairData() {
   };
 
   const handleChangeRadio = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log((event.target as HTMLInputElement).value);
+    // console.log((event.target as HTMLInputElement).value);
     setDeviceSn((event.target as HTMLInputElement).value);
     // setValue((event.target as HTMLInputElement).value);
   };
@@ -198,7 +199,7 @@ export default function RepairData() {
 
         UploadService.repairData(result.data,deviceId,tag, data.startTime)
         .then((result)=>{
-          console.log("HOH");
+          // console.log("HOH");
           
         })
         .catch((err)=>{
@@ -239,7 +240,7 @@ export default function RepairData() {
   const handleGetsite = () => {
     return UploadService.getSiteInfo()
       .then((result) => {
-        console.log(result.data.site);
+        // console.log(result.data.site);
 
         setDropdown(result.data.site);
       })
@@ -431,7 +432,7 @@ export default function RepairData() {
                         id="datetime-local"
                         label="end-date"
                         type="datetime-local"
-                        defaultValue="2021-07-21T12:00"
+                        defaultValue={`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}`}
                         className={classes.textField}
                         InputLabelProps={{
                           shrink: true,
